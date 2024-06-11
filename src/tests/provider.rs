@@ -2,10 +2,10 @@
 
 
 
-use crate::{add_scoped, add_singleton, provide, clear_provider_scope};
+use crate::{add_scoped, add_singleton, add_transient, clear_provider_scope, provide};
 use super::*;
 use std::sync::Arc;
-use test_utility::{TestScopedService, TestSingletonService};
+use test_utility::{TestScopedService, TestSingletonService, TestTransientService};
 use std::thread;
 use std::time::Duration;
 
@@ -34,6 +34,33 @@ fn test_provider_singleton_service() {
 }
 
 #[test]
+fn test_provider_transient_service() {
+    clear_provider_scope!();
+
+    // Aggiungi un servizio singleton usando la macro
+    add_transient!(TestTransientService);
+    let transient_service: Arc<TestTransientService> = provide!(TestTransientService);
+
+    let find_result = transient_service.find();
+    // let result = add(2, 2);
+    assert_eq!(transient_service.test, "transient");
+    assert_eq!(find_result, "find");
+}
+
+
+#[test]
+fn test_provider_failure_get_service() {
+    clear_provider_scope!();
+
+    let result = std::panic::catch_unwind(|| {
+        // Prova a recuperare un servizio non registrato
+        let _service: Arc<TestTransientService> = provide!(TestTransientService);
+    });
+
+    assert!(result.is_err(), "Expected to panic when trying to get an unregistered service");
+}
+
+#[test]
 fn test_singleton_service_time_consistency() {
     clear_provider_scope!();
 
@@ -49,4 +76,42 @@ fn test_singleton_service_time_consistency() {
 
     assert_eq!(service2.test, "singleton");
     assert_eq!(initial_time, subsequent_time, "The created_at time should remain consistent for singleton services.");
+}
+
+
+#[test]
+fn test_scoped_service_time_consistency() {
+    clear_provider_scope!();
+
+    add_scoped!(TestScopedService);
+
+    // Simula una pausa per assicurarsi che il tempo sia passato
+    thread::sleep(Duration::from_secs(1));
+
+    let service1: Arc<TestScopedService> = provide!(TestScopedService);
+    let initial_time = service1.created_at;
+    let service2: Arc<TestScopedService> = provide!(TestScopedService);
+    let subsequent_time = service2.created_at;
+
+    assert_eq!(service2.test, "scoped");
+    assert_eq!(initial_time, subsequent_time, "The created_at time should remain consistent for singleton services.");
+}
+
+
+#[test]
+fn test_transient_service_time_inconsistency() {
+    clear_provider_scope!();
+
+    add_transient!(TestTransientService);
+
+    // Simula una pausa per assicurarsi che il tempo sia passato
+    thread::sleep(Duration::from_secs(1));
+
+    let service1: Arc<TestTransientService> = provide!(TestTransientService);
+    let initial_time = service1.created_at;
+    let service2: Arc<TestTransientService> = provide!(TestTransientService);
+    let subsequent_time = service2.created_at;
+
+    assert_eq!(service2.test, "transient");
+    assert_ne!(initial_time, subsequent_time, "The created_at time should remain consistent for singleton services.");
 }

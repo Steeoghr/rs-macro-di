@@ -25,6 +25,7 @@ impl Default for TestSingletonService {
 
 pub struct TestScopedService {
     pub test: String,
+    pub created_at: DateTime<Utc>,
 }
 
 impl TestScopedService {
@@ -35,7 +36,33 @@ impl TestScopedService {
 
 impl Default for TestScopedService {
     fn default() -> Self {
-        Self { test: "scoped".to_string() }
+        Self { 
+            test: "scoped".to_string(),
+            created_at: SystemTime::now().into(),
+        }
+    }
+}
+
+
+
+
+pub struct TestTransientService {
+    pub test: String,
+    pub created_at: DateTime<Utc>,
+}
+
+impl TestTransientService {
+    pub fn find(&self) -> String {
+        "find".to_string()
+    }
+}
+
+impl Default for TestTransientService {
+    fn default() -> Self {
+        Self { 
+            test: "transient".to_string(),
+            created_at: SystemTime::now().into(),
+        }
     }
 }
 
