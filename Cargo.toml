@@ -2,6 +2,11 @@
 name = "rs-macro-di"
 version = "0.1.0"
 edition = "2021"
+authors = ["Steeoghr"]
+description = "Rust dependency injection by macro"
+homepage = "https://github.com/Steeoghr/rs-macro-di"
+repository = "https://github.com/Steeoghr/rs-macro-di"
+license = "MIT"
 
 [dependencies]
 once_cell = "1.10.0"
