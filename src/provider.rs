@@ -74,6 +74,10 @@ impl ServiceProvider {
         self.scoped.clear();
     }
 
+    pub fn clear_scoped_instances(&mut self) {
+        self.scoped_instances.borrow_mut().clear();
+    }
+
     pub fn clear_scope(&mut self) {
         self.clear_singletons();
         self.clear_scoped();
@@ -89,4 +93,17 @@ pub fn get_service_provider() -> &'static Mutex<ServiceProvider> {
 pub fn clear_provider_scope() {
     let mut provider = INSTANCE.lock().unwrap();
     provider.clear_scope();
+}
+
+pub fn clear_scoped_instances() {
+    let mut provider = INSTANCE.lock().unwrap();
+    provider.clear_scoped_instances();
+}
+
+pub fn with_scope<F>(scoped_function: F)
+where
+    F: FnOnce() + Send + 'static,
+{
+    scoped_function();
+    clear_scoped_instances();
 }
