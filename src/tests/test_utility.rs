@@ -22,7 +22,6 @@ impl Default for TestSingletonService {
     }
 }
 
-
 pub struct TestScopedService {
     pub test: String,
     pub created_at: DateTime<Utc>,
@@ -43,9 +42,6 @@ impl Default for TestScopedService {
     }
 }
 
-
-
-
 pub struct TestTransientService {
     pub test: String,
     pub created_at: DateTime<Utc>,
@@ -65,4 +61,3 @@ impl Default for TestTransientService {
         }
     }
 }
-

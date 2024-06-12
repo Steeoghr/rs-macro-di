@@ -1,10 +1,7 @@
-
-
-
-
+use crate::provider::with_scope;
 use crate::{add_scoped, add_singleton, add_transient, clear_provider_scope, provide};
 use super::*;
-use std::sync::Arc;
+use std::sync::{Arc, RwLock};
 use test_utility::{TestScopedService, TestSingletonService, TestTransientService};
 use std::thread;
 use std::time::Duration;
@@ -17,7 +14,7 @@ fn test_provider_scoped_service() {
 
     // Simula una pausa per assicurarsi che il tempo sia passato
     thread::sleep(Duration::from_secs(1));
-    
+
     let scoped_service: Arc<TestScopedService> = provide!(TestScopedService);
 
     // let result = add(2, 2);
@@ -77,7 +74,6 @@ fn test_singleton_service_time_consistency() {
     assert_eq!(initial_time, subsequent_time, "The created_at time should remain consistent for singleton services.");
 }
 
-
 #[test]
 fn test_scoped_service_time_consistency() {
     clear_provider_scope!();
@@ -93,7 +89,7 @@ fn test_scoped_service_time_consistency() {
     let subsequent_time = service2.created_at;
 
     assert_eq!(service2.test, "scoped");
-    assert_eq!(initial_time, subsequent_time, "The created_at time should remain consistent for singleton services.");
+    assert_eq!(initial_time, subsequent_time, "The created_at time should remain consistent for scoped services.");
 }
 
 #[test]
@@ -111,7 +107,45 @@ fn test_transient_service_time_inconsistency() {
     let subsequent_time = service2.created_at;
 
     assert_eq!(service2.test, "transient");
-    assert_ne!(initial_time, subsequent_time, "The created_at time should remain consistent for singleton services.");
+    assert_ne!(initial_time, subsequent_time, "The created_at time shouldn't remain consistent for transient services.");
+}
+
+#[test]
+fn test_clear_scoped() {
+    clear_provider_scope!();
+    let initial_time = Arc::new(RwLock::new(None));
+    let subsequent_time = Arc::new(RwLock::new(None));
+
+    add_scoped!(TestScopedService);
+
+    {
+        let initial_time_ref = Arc::clone(&initial_time);
+        with_scope(move || {
+            let service1: Arc<TestScopedService> = provide!(TestScopedService);
+            let mut initial_time_lock = initial_time_ref.write().unwrap();
+            *initial_time_lock = Some(service1.created_at);
+        });
+    }
+
+    {
+
+        
+        let subsequent_time_ref = Arc::clone(&subsequent_time);
+        with_scope(move || {
+            let service2: Arc<TestScopedService> = provide!(TestScopedService);
+            let mut subsequent_time_lock = subsequent_time_ref.write().unwrap();
+            *subsequent_time_lock = Some(service2.created_at);
+        });
+    }
+
+    let initial_time_value = initial_time.read().unwrap().expect("initial_time should be set");
+    let subsequent_time_value = subsequent_time.read().unwrap().expect("subsequent_time should be set");
+
+    assert_ne!(
+        initial_time_value,
+        subsequent_time_value,
+        "The created_at time shouldn't remain consistent for scoped services worked in different scoped block.."
+    );
 }
 
 // #[test]
