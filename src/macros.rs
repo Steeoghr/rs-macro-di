@@ -52,12 +52,3 @@ macro_rules! provider {
         }
     };
 }
-
-#[macro_export]
-macro_rules! clear_provider_scope {
-    () => {
-        {
-            $crate::provider::clear_provider_scope();
-        }
-    };
-}

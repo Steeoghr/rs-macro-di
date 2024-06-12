@@ -1,10 +1,19 @@
 use crate::provider::with_scope;
-use crate::{add_scoped, add_singleton, add_transient, clear_provider_scope, provide};
+use crate::{add_scoped, add_singleton, add_transient, provide};
 use super::*;
 use std::sync::{Arc, RwLock};
 use test_utility::{TestScopedService, TestSingletonService, TestTransientService};
 use std::thread;
 use std::time::Duration;
+
+#[macro_export]
+macro_rules! clear_provider_scope {
+    () => {
+        {
+            $crate::provider::clear_provider_scope();
+        }
+    };
+}
 
 #[test]
 fn test_provider_scoped_service() {
@@ -129,7 +138,7 @@ fn test_clear_scoped() {
 
     {
 
-        
+
         let subsequent_time_ref = Arc::clone(&subsequent_time);
         with_scope(move || {
             let service2: Arc<TestScopedService> = provide!(TestScopedService);
