@@ -8,7 +8,7 @@ rs-macro-di = "0.2.0"
 
 or add with cargo:
 
-```toml
+```
 cargo add rs-macro-di
 ```
 
