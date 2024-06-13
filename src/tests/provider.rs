@@ -1,5 +1,5 @@
-use crate::provider::with_scope;
-use crate::{add_scoped, add_singleton, add_transient, provide};
+use crate::provider::{get_mut_service_provider, with_scope};
+use crate::{add_scoped, add_singleton, add_transient, provide, provider};
 use super::*;
 use std::sync::{Arc, RwLock};
 use test_utility::{TestScopedService, TestSingletonService, TestTransientService};
@@ -13,6 +13,36 @@ macro_rules! clear_provider_scope {
             $crate::provider::clear_provider_scope();
         }
     };
+}
+
+#[test]
+fn test_only_provider_macro() {
+    clear_provider_scope!();
+    // Aggiungi un servizio singleton usando la macro
+    let mut provider = provider!();
+
+    provider.add_scoped::<TestScopedService>();
+
+    let scoped_service: Arc<TestScopedService> = provider.provide::<TestScopedService>();
+
+    // let result = add(2, 2);
+    assert_eq!(scoped_service.test, "scoped");
+    assert_eq!(scoped_service.find(), "find");
+}
+
+#[test]
+fn test_provider_without_macro() {
+    clear_provider_scope!();
+    // Aggiungi un servizio singleton usando la macro
+    let mut provider = get_mut_service_provider();
+
+    provider.add_scoped::<TestScopedService>();
+
+    let scoped_service: Arc<TestScopedService> = provider.provide::<TestScopedService>();
+
+    // let result = add(2, 2);
+    assert_eq!(scoped_service.test, "scoped");
+    assert_eq!(scoped_service.find(), "find");
 }
 
 #[test]

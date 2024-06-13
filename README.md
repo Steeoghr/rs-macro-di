@@ -34,16 +34,19 @@ let service: Arc<ServiceClass> = provide!(ServiceClass);
 ## Or without macro
 ```rust
 // Get provider
-let provider = provider!();
+let mut provider = provider!();
+// or
+let mut provider = get_mut_service_provider();
+
 
 // Add singleton service
 provider.add_singleton(Arc::new(SingletonService::new()));
 
 // Add scoped service
-provider.add_scoped<ScopedService>();
+provider.add_scoped::<ScopedService>();
 
 // Add transient service
-provider.add_transient<ScopedService>();
+provider.add_transient::<ScopedService>();
 ```
 
 ```rust
