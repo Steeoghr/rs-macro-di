@@ -140,7 +140,7 @@ dependencies = [
 
 [[package]]
 name = "rs-macro-di"
-version = "0.2.3"
+version = "0.2.4"
 dependencies = [
  "chrono",
  "once_cell",
