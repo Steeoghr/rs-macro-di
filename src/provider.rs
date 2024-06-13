@@ -1,7 +1,7 @@
 use std::any::{Any, TypeId};
 use std::cell::RefCell;
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
+use std::sync::{Arc, Mutex, MutexGuard};
 use once_cell::sync::Lazy;
 
 pub struct ServiceProvider {
@@ -88,6 +88,10 @@ static INSTANCE: Lazy<Mutex<ServiceProvider>> = Lazy::new(|| Mutex::new(ServiceP
 
 pub fn get_service_provider() -> &'static Mutex<ServiceProvider> {
     &INSTANCE
+}
+
+pub fn get_mut_service_provider() -> MutexGuard<'static, ServiceProvider> {
+    return INSTANCE.lock().unwrap();
 }
 
 pub fn clear_provider_scope() {
