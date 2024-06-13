@@ -53,7 +53,7 @@ provider.add_transient::<ScopedService>();
 // Get provider
 let provider = provider!();
 
-let service: Arc<ServiceClass> = provider.provide(ServiceClass);
+let service: Arc<ServiceClass> = provider.provide::<ServiceClass>();
 ```
 
 ## Use a scoped block
@@ -63,6 +63,6 @@ add_scoped!(ScopedService);
 
 // scoped service instances are cleared at the end of with_scope
 with_scope(|| {
-    let service: Arc<ServiceClass> = provide!(ServiceClass);
+    let service: Arc<ScopedService> = provide!(ScopedService);
 })
 ```

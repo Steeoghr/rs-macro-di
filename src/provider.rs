@@ -95,12 +95,12 @@ pub fn get_mut_service_provider() -> MutexGuard<'static, ServiceProvider> {
 }
 
 pub fn clear_provider_scope() {
-    let mut provider = INSTANCE.lock().unwrap();
+    let mut provider = get_mut_service_provider();
     provider.clear_scope();
 }
 
 pub fn clear_scoped_instances() {
-    let mut provider = INSTANCE.lock().unwrap();
+    let mut provider = get_mut_service_provider();
     provider.clear_scoped_instances();
 }
 
