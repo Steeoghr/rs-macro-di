@@ -248,6 +248,7 @@ dependencies = [
  "once_cell",
  "proc-macro2",
  "quote",
+ "rs-web-host",
  "serde",
  "syn 1.0.109",
  "tokio",
@@ -341,6 +342,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "469052894dcb553421e483e4209ee581a45100d31b4018de03e5a7ad86374a7e"
 dependencies = [
  "bitflags",
+]
+
+[[package]]
+name = "rs-web-host"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ddfd22e373c330bde80d6bf211e7ef0e3f4da9be04af4c944231202a4befd99a"
+dependencies = [
+ "chrono",
+ "inventory",
+ "once_cell",
+ "proc-macro2",
+ "quote",
+ "serde",
+ "syn 1.0.109",
 ]
 
 [[package]]
