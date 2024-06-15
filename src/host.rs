@@ -1,6 +1,7 @@
 use std::collections::HashMap;
-use std::sync::Mutex;
+use std::sync::{Arc, Mutex};
 use inventory::iter;
+
 use crate::provider::{get_service_provider, ServiceProvider};
 
 #[derive(Clone)]
@@ -8,7 +9,6 @@ pub struct Route {
     pub method: String,
     pub path: String,
     pub handler: fn(&[(&str, &str)], Option<String>) -> String,
-    pub params: Vec<String>,
     pub has_body: bool,
 }
 

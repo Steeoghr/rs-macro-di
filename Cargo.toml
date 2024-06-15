@@ -1,6 +1,6 @@
 [package]
 name = "rs-macro-di"
-version = "0.2.5"
+version = "0.2.6"
 edition = "2021"
 authors = ["Steeoghr"]
 description = "Rust dependency injection by macro"
