@@ -331,7 +331,7 @@ dependencies = [
 
 [[package]]
 name = "rs-macro-di"
-version = "0.2.8"
+version = "0.3.0"
 dependencies = [
  "chrono",
  "inventory",
@@ -346,9 +346,9 @@ dependencies = [
 
 [[package]]
 name = "rs-web-host"
-version = "0.1.0"
+version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ddfd22e373c330bde80d6bf211e7ef0e3f4da9be04af4c944231202a4befd99a"
+checksum = "e1a03c52571182c2116dcb99e42d01fe333c2673bca1999715992baaf0084a7d"
 dependencies = [
  "chrono",
  "inventory",
