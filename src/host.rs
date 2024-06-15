@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use std::sync::Mutex;
+use std::sync::{Arc, Mutex};
 use inventory::iter;
 
 use crate::provider::{get_service_provider, ServiceProvider};
@@ -15,7 +15,7 @@ pub struct Route {
 inventory::collect!(Route);
 
 pub struct WebHost {
-    provider: &'static Mutex<ServiceProvider>,
+    provider: Arc<Mutex<ServiceProvider>>,
     routes: HashMap<String, Route>,
 }
 
@@ -46,10 +46,8 @@ impl WebHost {
 
     pub fn handle_request(&self, method: &str, path: &str, body: Option<String>) -> Option<String> {
         let key = format!("{}:{}", method, path);
-        for (route_key, route) in &self.routes {
-            if route_key.starts_with(&key) {
-                return Some((route.handler)(path.to_string()));
-            }
+        if let Some(route) = self.routes.get(&key) {
+            return Some((route.handler)(path.to_string()));
         }
         None
     }
