@@ -346,9 +346,7 @@ dependencies = [
 
 [[package]]
 name = "rs-web-host"
-version = "0.1.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "53c358f4335805f63e0afea39e07ecfc650e85ba2e46ccc3413c1e0c0d98a60c"
+version = "0.1.10"
 dependencies = [
  "chrono",
  "inventory",
