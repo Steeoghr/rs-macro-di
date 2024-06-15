@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
+use std::sync::Mutex;
 use inventory::iter;
 
 use crate::provider::{get_service_provider, ServiceProvider};
