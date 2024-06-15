@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
+use std::sync::Mutex;
 use inventory::iter;
 
 use crate::provider::{get_service_provider, ServiceProvider};
@@ -8,7 +8,7 @@ use crate::provider::{get_service_provider, ServiceProvider};
 pub struct Route {
     pub method: String,
     pub path: String,
-    pub handler: fn(&[(&str, &str)], Option<String>) -> String,
+    pub handler: fn(String) -> String,
     pub has_body: bool,
 }
 
@@ -44,24 +44,11 @@ impl WebHost {
         }
     }
 
-    fn extract_params<'a>(&self, path: &'a str, route: &'a Route) -> Vec<(&'a str, &'a str)> {
-        let mut params = Vec::new();
-        let path_parts: Vec<&str> = path.split('/').collect();
-        let route_parts: Vec<&str> = route.path.split('/').collect();
-        for (route_part, path_part) in route_parts.iter().zip(path_parts.iter()) {
-            if route_part.starts_with('{') && route_part.ends_with('}') {
-                params.push((route_part.trim_matches(&['{', '}'][..]), *path_part));
-            }
-        }
-        params
-    }
-
     pub fn handle_request(&self, method: &str, path: &str, body: Option<String>) -> Option<String> {
         let key = format!("{}:{}", method, path);
         for (route_key, route) in &self.routes {
             if route_key.starts_with(&key) {
-                let params = self.extract_params(path, route);
-                return Some((route.handler)(&params, body.clone()));
+                return Some((route.handler)(path.to_string()));
             }
         }
         None
@@ -72,7 +59,7 @@ impl WebHost {
         std::thread::spawn(move || {
             // Simulate a request handling loop
             for (key, route) in &routes {
-                let response = (route.handler)(&[], None);
+                let response = (route.handler)("".to_string());
                 println!("Handled {}: {}", key, response);
             }
         }).join().unwrap();

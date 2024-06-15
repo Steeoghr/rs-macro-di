@@ -331,7 +331,7 @@ dependencies = [
 
 [[package]]
 name = "rs-macro-di"
-version = "0.2.6"
+version = "0.2.7"
 dependencies = [
  "chrono",
  "inventory",
