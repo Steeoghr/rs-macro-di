@@ -1,7 +1,7 @@
 [package]
 name = "my_project"
 version = "0.2.5"
-edition = "2018"
+edition = "2021"
 authors = ["Steeoghr"]
 description = "Rust dependency injection by macro"
 homepage = "https://github.com/Steeoghr/rs-macro-di"
