@@ -2,12 +2,15 @@
 name = "my_project"
 version = "0.1.0"
 edition = "2018"
+authors = ["Steeoghr"]
+description = "Rust dependency injection by macro"
+homepage = "https://github.com/Steeoghr/rs-macro-di"
+repository = "https://github.com/Steeoghr/rs-macro-di"
+license = "MIT"
 
-[lib]
-proc-macro = true
 
 [dependencies]
-proc-macro2 = "1.0"
+proc-macro2 = "1.0.83"
 quote = "1.0"
 syn = { version = "1.0", features = ["full"] }
 inventory = "0.1.10"

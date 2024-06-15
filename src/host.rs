@@ -1,11 +1,7 @@
-
-
-
-
-
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
+use std::sync::Mutex;
 use inventory::iter;
+use crate::provider::{get_service_provider, ServiceProvider};
 
 #[derive(Clone)]
 pub struct Route {
@@ -19,7 +15,7 @@ pub struct Route {
 inventory::collect!(Route);
 
 pub struct WebHost {
-    provider: Arc<Mutex<ServiceProvider>>,
+    provider: &'static Mutex<ServiceProvider>,
     routes: HashMap<String, Route>,
 }
 
@@ -86,4 +82,3 @@ impl WebHost {
 pub trait IStartup {
     fn configure_services(provider: &mut ServiceProvider);
 }
-
