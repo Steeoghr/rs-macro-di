@@ -15,7 +15,7 @@ pub struct Route {
 inventory::collect!(Route);
 
 pub struct WebHost {
-    provider: Arc<Mutex<ServiceProvider>>,
+    provider: &'static Mutex<ServiceProvider>,
     routes: HashMap<String, Route>,
 }
 
